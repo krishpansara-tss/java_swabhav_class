@@ -1,23 +1,29 @@
-package com.bank.test;
+package com.bank.account.test;
 
-import com.bank.entity.Account;
+import com.bank.account.BaseAccount;
+import com.bank.account.CurrentBaseAccount;
+import com.bank.account.SavingBaseAccount;
+import com.bank.payment.interaction.PaymentMenu;
 
 import java.util.Scanner;
 
 public class AccountTest {
     public static void main(String[] args) {
-        Account[] accountArray = new Account[10];
+        BaseAccount[] baseAccounts = new BaseAccount[10];
+//        ArrayList<Account> accounts = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
         int accountCount = 0;
 
         int operation;
         while(true){
-            System.out.println("Enter the operation you want to perform");
+            System.out.println("\n\nEnter the operation you want to perform");
             System.out.println("1. Create Account");
             System.out.println("2. Deposit");
             System.out.println("3. Withdraw");
             System.out.println("4. Transfer");
             System.out.println("5. Get Account Details");
+            System.out.println("6. Pay");
+            System.out.println("7. Exit");
 
             while(true){
                 if(scanner.hasNextInt()){
@@ -33,19 +39,25 @@ public class AccountTest {
             switch (operation){
                 // craete account
                 case 1:
-                    Account newAccount = createAccount(scanner);
-                    // add new account in the array
-                    accountArray[accountCount++] = newAccount;
+                    if(accountCount == 10){
+                        System.out.println("Bank is full");
+                        break;
+                    }
+                    BaseAccount newBaseAccount = createAccount(scanner);
+                    baseAccounts[accountCount++] = newBaseAccount;
+//                    accounts.add(newAccount);
                     System.out.println("Account created successfully");
+
+                    newBaseAccount.displayAccountDetails();
+
                     break;
 
                 // deposit
                 case 2:
-
-                    Account currAccountToDeposit = accountVerification(accountArray, scanner);
-                    if(currAccountToDeposit != null){
+                    BaseAccount currBaseAccountToDeposit = accountVerification(baseAccounts, accountCount, scanner);
+                    if(currBaseAccountToDeposit != null){
                         int amountToDeposit = inputAmount(scanner);
-                        if(currAccountToDeposit.deposit(amountToDeposit)){
+                        if(currBaseAccountToDeposit.deposit(amountToDeposit)){
                             System.out.println("Operation Done successfully");
                         }else{
                             System.out.println("Operation failed");
@@ -57,13 +69,13 @@ public class AccountTest {
 
                 // withdraw
                 case 3:
-                    Account currAccountToWithdraw = accountVerification(accountArray, scanner);
-                    if(currAccountToWithdraw != null){
+                    BaseAccount currBaseAccountToWithdraw = accountVerification(baseAccounts, accountCount, scanner);
+                    if(currBaseAccountToWithdraw != null){
                         int amountToWithdraw = inputAmount(scanner);
-                        if(currAccountToWithdraw.deposit(amountToWithdraw)){
+                        if(currBaseAccountToWithdraw.withdraw(amountToWithdraw)){
                             System.out.println("Operation Done successfully");
                         }else{
-                            System.out.println("Operation Done successfully");
+                            System.out.println("Operation Failed");
                         }
                     }else{
                         System.out.println("No account found");
@@ -73,45 +85,58 @@ public class AccountTest {
                 // transfer
                 case 4:
                     System.out.println("Enter Details about the sender's account : ");
-                    Account accountSender = accountVerification(accountArray, scanner);
-                    if(accountSender == null){
+                    BaseAccount baseAccountSender = accountVerification(baseAccounts, accountCount, scanner);
+                    if(baseAccountSender == null){
                         System.out.println("No account exist");
                         break;
                     }
                     System.out.println("Enter Details about the receiver's account : ");
-                    Account accountReceiver = accountVerification(accountArray, scanner);
+                    BaseAccount baseAccountReceiver = accountVerification(baseAccounts, accountCount, scanner);
 
-                    if(accountReceiver == null){
+                    if(baseAccountReceiver == null){
                         System.out.println("No account exist");
+                        break;
+                    }
+
+                    if(baseAccountReceiver.getAccountNumber() == baseAccountSender.getAccountNumber()){
+                        System.out.println("Account number are same!! invalid");
                         break;
                     }
 
                     int amountToTransfer = inputAmount(scanner);
 
-                    boolean sender = accountSender.withdraw(amountToTransfer);
-                    boolean reciever = accountReceiver.deposit(amountToTransfer);
-
-                    if(sender && reciever){
-                        System.out.println("Transferred Successfully");
-                    }else if(sender && !reciever){
-                        System.out.println("Some error occured!");
+                    if(baseAccountSender.withdraw(amountToTransfer)){
+                        if(baseAccountReceiver.deposit(amountToTransfer)){
+                            System.out.println("Transfer Done successfully");
+                        }else{
+                            System.out.println("Issue at the reciever side");
+                        }
+                    }else{
+                        System.out.println("Issue at the sender side");
                     }
                     break;
 
                 // account detail
                 case 5:
-                    Account currAccountToDisplay = accountVerification(accountArray, scanner);
-                    if(currAccountToDisplay != null){
-                        currAccountToDisplay.displayAccountDetails();
+                    BaseAccount currBaseAccountToDisplay = accountVerification(baseAccounts, accountCount, scanner);
+                    if(currBaseAccountToDisplay != null){
+                        currBaseAccountToDisplay.displayAccountDetails();
                     }else{
                         System.out.println("Account not found");
                     }
+                    break;
+
+                // paying methods
+                case 6:
+                    BaseAccount account = accountVerification(baseAccounts, accountCount, scanner);
+                    System.out.println("Opening available payment menu: ");
+                    PaymentMenu.openPaymentMenu(account);
 
                     break;
 
                 default:
                     System.out.println("Program Exited");
-                    break;
+                    return;
             }
         }
     }
@@ -138,14 +163,15 @@ public class AccountTest {
         return amount;
     }
 
-    public static Account accountVerification(Account[] accountArray, Scanner scanner){
+    public static BaseAccount accountVerification(BaseAccount[] baseAccounts, int accountCount, Scanner scanner){
         int accountNumber;
         while(true){
+            System.out.print("\n\nEnter account number : ");
             if(scanner.hasNextInt()){
                 accountNumber = scanner.nextInt();
-                for(Account a : accountArray)
-                    if (a.getAccountNumber() == accountNumber) {
-                           return a;
+                for(int i = 0; i < accountCount; i++)
+                    if (baseAccounts[i] != null && baseAccounts[i].getAccountNumber() == accountNumber) {
+                        return baseAccounts[i];
                     }
                 break;
             }else{
@@ -157,7 +183,7 @@ public class AccountTest {
         return null;
     }
 
-    public static Account createAccount(Scanner scanner){
+    public static BaseAccount createAccount(Scanner scanner){
         String name;
         int accountType, balance;
 
@@ -194,6 +220,11 @@ public class AccountTest {
             }
         }
 
-        return new Account(name, balance, accountType);
+        if(accountType == 1){
+            return new SavingBaseAccount(name, balance, "Saving");
+        }else{
+            return new CurrentBaseAccount(name, balance, "Current");
+
+        }
     }
 }
