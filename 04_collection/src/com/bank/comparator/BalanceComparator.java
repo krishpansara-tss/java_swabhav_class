@@ -1,0 +1,11 @@
+package com.bank.comparator;
+
+import com.bank.model.Account;
+import java.util.Comparator;
+
+class BalanceComparator implements Comparator<Account> {
+    @Override
+    public int compare(Account o1, Account o2) {
+        return (int)(o1.getBalance() - o2.getBalance());
+    }
+}

@@ -1,5 +1,7 @@
 package com.bank.account;
 
+import com.bank.exceptions.MinimumBalanceException;
+
 public class SavingBaseAccount extends BaseAccount {
     private int minBalance;
 
@@ -45,8 +47,9 @@ public class SavingBaseAccount extends BaseAccount {
         }
 
         if((balance - amount) <= minBalance){
-            System.out.println("Your account must have balance more than 500 after withdrawn.");
-            return false;
+            throw new MinimumBalanceException();
+//            System.out.println("Your account must have balance more than 500 after withdrawn.");
+//            return false;
         }
 
         balance -= amount;
