@@ -5,7 +5,7 @@ public class Test {
         ModelA a = new ModelB();
 //        a.m3();
 
-//        ModelB b = new ModelA();
-//        b.m1();
+        ModelB b = new ModelB();
+        b.m2();
     }
 }
