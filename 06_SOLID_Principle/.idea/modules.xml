@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/01_SRP/01_SRP.iml" filepath="$PROJECT_DIR$/01_SRP/01_SRP.iml" />
+      <module fileurl="file://$PROJECT_DIR$/02_OCP/02_OCP.iml" filepath="$PROJECT_DIR$/02_OCP/02_OCP.iml" />
+      <module fileurl="file://$PROJECT_DIR$/03_LSP/03_LSP.iml" filepath="$PROJECT_DIR$/03_LSP/03_LSP.iml" />
+      <module fileurl="file://$PROJECT_DIR$/04_ISP/04_ISP.iml" filepath="$PROJECT_DIR$/04_ISP/04_ISP.iml" />
+      <module fileurl="file://$PROJECT_DIR$/05_DIP/05_DIP.iml" filepath="$PROJECT_DIR$/05_DIP/05_DIP.iml" />
       <module fileurl="file://$PROJECT_DIR$/06_SOLID_Principle.iml" filepath="$PROJECT_DIR$/06_SOLID_Principle.iml" />
-      <module fileurl="file://$PROJECT_DIR$/OCP/OCP.iml" filepath="$PROJECT_DIR$/OCP/OCP.iml" />
-      <module fileurl="file://$PROJECT_DIR$/SRP/SRP.iml" filepath="$PROJECT_DIR$/SRP/SRP.iml" />
     </modules>
   </component>
 </project>
