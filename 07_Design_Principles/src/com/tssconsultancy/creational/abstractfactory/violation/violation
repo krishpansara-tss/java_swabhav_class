@@ -1,0 +1,10 @@
+factory's solution is it self a violation
+
+why??
+beacuse when a we have to add a new car we have to make changes in the following:
+factory method
+enum
+
+which breaks the rule of the open/close principle
+
+so we have introduced abstract factory design pattern
