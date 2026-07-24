@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!--
+    <bean class="com.tssconsultancy.core.entity.HardDisk" name="h" id="harddisk">
+        <property name="capacity" value="21" />
+    </bean>
+
+   <bean class="com.tssconsultancy.core.entity.Computer" name="computer" id="computer">
+        <property name="company" value="gigabyte" />
+       <property name="hardDisk" ref="h" />
+   </bean>
+-->
+
+    <bean class="com.tssconsultancy.core.entity.HardDisk" name="h" id="harddisk">
+        <constructor-arg name="capacity" value="1024" />
+    </bean>
+
+    <bean class="com.tssconsultancy.core.entity.Computer" name="computer" id="computer">
+        <constructor-arg name="company" value="gigabyte" />
+        <constructor-arg name="harddisk" ref="h" />
+    </bean>
+
+</beans>
