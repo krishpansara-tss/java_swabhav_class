@@ -2,14 +2,20 @@ package com.tssconsultancy.core.controller;
 
 import com.tssconsultancy.core.dto.EmployeeRequestDTO;
 import com.tssconsultancy.core.dto.EmployeeResponseDTO;
+import com.tssconsultancy.core.error.EmployeeError;
+import com.tssconsultancy.core.error.StudentError;
+import com.tssconsultancy.core.exception.EmployeeNotFoundException;
+import com.tssconsultancy.core.exception.StudentNotFoundException;
 import com.tssconsultancy.core.mapper.EmployeeMapper;
 import com.tssconsultancy.core.models.Employee;
 import com.tssconsultancy.core.services.EmployeeServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +54,12 @@ public class EmployeeController {
         employeeService.addNewEmployee(employee);
         return new ResponseEntity<>(employee, HttpStatus.CREATED);
     }
+
+    @ExceptionHandler(EmployeeNotFoundException.class)
+    private ResponseEntity<EmployeeError> studentNotFoundExceptionHandler(EmployeeNotFoundException studentNotFoundException, HttpServletRequest httpServletRequest){
+        return new ResponseEntity<>(new EmployeeError(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(), studentNotFoundException.getMessage(),  httpServletRequest.getRequestURI()), HttpStatus.NOT_FOUND);
+    }
+
 
 //    private Employee employeeResponseDtoToEmployee(EmployeeRequestDTO employeeRequestDTO){
 //        Employee employee = new Employee();

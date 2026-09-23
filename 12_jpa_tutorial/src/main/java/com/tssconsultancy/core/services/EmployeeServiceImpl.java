@@ -1,5 +1,6 @@
 package com.tssconsultancy.core.services;
 
+import com.tssconsultancy.core.exception.EmployeeNotFoundException;
 import com.tssconsultancy.core.models.Employee;
 import com.tssconsultancy.core.reposetory.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class EmployeeServiceImpl implements EmployeeServices {
     public Employee getEmployeeById(Long id) {
         return employeeRepository.findById(id).orElseThrow(
                 () -> {
-                    throw new RuntimeException("Employee with id " + id + " does not exist.");
+                    throw new EmployeeNotFoundException("Employee with id " + id + " does not exist.");
                 }
         );
     }
